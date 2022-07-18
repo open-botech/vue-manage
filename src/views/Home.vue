@@ -4,7 +4,7 @@
             <!-- logo -->
             <div class="nav-left-logo">
                 <img src="./../assets/logo.png" alt="">
-                <span>Manger</span>
+                <span>审批系统</span>
             </div>
             <!-- 菜单 -->
             <el-menu

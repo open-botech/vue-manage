@@ -2,7 +2,7 @@
     <div class="welcome-main">
         <div class="welcome-left">
             <div class="main-title">欢迎使用</div>
-            <div class="sub-title">星系通用后台管理系统V1.0</div>
+            <div class="sub-title">审批后台管理系统V1.0</div>
             <div class="desc">- Vue3.0+ElementPlus+Node+Mongo打造通用后台管理系统</div>
         </div>
         <div class="welcome-right"></div>

@@ -67,19 +67,19 @@
       >
         <el-form ref="ruleForm" label-width="168px" label-suffix=":" :model="approveForm" :rules="rules">
           <el-form-item label="申请人">
-            {{ detailData.applyUser }}
+            {{ detailData.person }}
           </el-form-item>
-          <el-form-item label="休假类型">
-            {{ detailData.applyType }}
+          <el-form-item label="感知资源类型">
+            {{ detailData.dataClass }}
           </el-form-item>
-          <el-form-item label="休假时间">
-            {{ detailData.time }}
+          <el-form-item label="感知数据资源项">
+            {{ detailData.dataItem }}
           </el-form-item>
-          <el-form-item label="休假时长">
-            {{ detailData.leaveTime }}
+          <el-form-item label="感知资源分类">
+            {{ detailData.dataCategory }}
           </el-form-item>
-          <el-form-item label="休假原因">
-            {{ detailData.reasons }}
+          <el-form-item label="感知资源分级">
+            {{ detailData.dataLevel }}
           </el-form-item>
           <el-form-item label="审核状态">
             {{ detailData.applyStateName }}
@@ -119,55 +119,75 @@ export default {
         prop: "orderNo",
         label: "单号",
       },
+
       {
-        prop: "applyName",
-        label: "申请人",
-        formatter(row, col, value){
-          return row.applyUser.userName
-        }
-      },
-      {
-        prop: "",
-        label: "休假时间",
-				formatter(row, col, value) {
-					return publicFn.formateDate(new Date(row.startTime), 'yyyy-MM-dd') + '到' + publicFn.formateDate(new Date(row.endTime), 'yyyy-MM-dd')
-				}
-      },
-      {
-        prop: "leaveTime",
-        label: "休假时间",
-      },
-      {
-        prop: "applyType",
-        label: "休假类型",
+        prop: "dataClass",
+        label: "感知资源类型",
         formatter(row, col, value) {
           return {
-            1: "事假",
-            2: "调休",
-            3: "年假"
+            1: "静态数据",
+            2: "动态数据"
           }[value];
         },
       },
       {
-        prop: "reasons",
-        label: "休假原因"
+        prop: "dataItem",
+        label: "感知数据资源项"
       },
       {
-        prop: "createTime",
-        label: "申请时间",
+        prop: "dataCategory",
+        label: "感知资源分类",
         formatter(row, col, value) {
-          return publicFn.formateDate(new Date(value));
+          return {
+            1: "人脸",
+            2: "卡口",
+            3: "结构化",
+            4: "社区"
+          }[value];
         },
       },
+      {
+        prop: "dataLevel",
+        label: "感知资源分级",
+        formatter(row, col, value) {
+          return {
+            1: "一级",
+            2: "二级",
+            3: "三级",
+            4: "四级"
+          }[value];
+        },
+      },
+      {
+        prop: "dept",
+        label: "申请单位"
+      },
+      {
+        prop: "person",
+        label: "申请人"
+      },
+      {
+        prop: "personPhone",
+        label: "申请人联系方式"
+      },
+      {
+        prop: "applyTime",
+        label: "申请时间"
+      },
+      {
+        prop: "reasons",
+        label: "申请原因"
+      },
+
       {
         prop: "auditUsers",
         label: "审批人"
       },
-			{
+      {
         prop: "curAuditUserName",
         label: "当前审批人"
       },
-			{
+      {
         prop: "applyState",
         label: "审批状态",
         formatter(row, col, value) {
@@ -233,13 +253,28 @@ export default {
     };
     // 表格每行查看按钮事件
     const handleAudit = (row) => {
-      detailData.applyType = {
-        1: "事假",
-        2: "调休",
-        3: "年假"
-      }[row.applyType]
-      detailData.time = publicFn.formateDate(new Date(row.startTime), 'yyyy-MM-dd') + '到' + publicFn.formateDate(new Date(row.endTime), 'yyyy-MM-dd')
-      detailData.leaveTime = row.leaveTime
+      detailData.dataClass = {
+        1: "静态数据",
+        2: "动态数据"
+      }[row.dataClass]
+      detailData.dataItem = row.dataItem
+      detailData.dataCategory = {
+        1: "人脸",
+        2: "卡口",
+        3: "结构化",
+        4: "社区"
+      }[row.dataCategory]
+      detailData.dataLevel =  {
+        1: "一级",
+        2: "二级",
+        3: "三级",
+        4: "四级"
+      }[row.dataLevel]
+
+      detailData.dept = row.dept
+      detailData.person = row.person
+      detailData.personPhone = row.personPhone
+      detailData.applyTime = row.applyTime
       detailData.reasons = row.reasons
       detailData.applyStateName = {
         1: "待审批",

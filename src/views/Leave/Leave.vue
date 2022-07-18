@@ -26,7 +26,7 @@
           type="primary"
 					@click="applyHandler"
           v-permisson="'leave-create'"
-          >申请休假</el-button
+          >申请</el-button
         >
       </div>
       <div class="leave-bottom-table">
@@ -73,35 +73,51 @@
       </div>
 			<!-- 申请休假弹窗 -->
 			<el-dialog
-			title="申请休假"
+			title="申请"
 			v-model="isShow"
 			width="40%"
 			>
-				<el-form :model="applyForm" :rules="rules" ref="applyRuleForm" label-width="100px">
-					<el-form-item label="休假类型" prop="applyType">
-						<el-select v-model="applyForm.applyType" placeholder="请选择休假类型">
-							<el-option label="事假" :value="1"></el-option>
-							<el-option label="调休" :value="2"></el-option>
-							<el-option label="年假" :value="3"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="休假时间" prop="date">
-						<el-date-picker
-							v-model="applyForm.date"
-							@change="leaveTimeChange"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="休假时长" prop="leaveTime">
-						{{applyForm.leaveTime}}
-					</el-form-item>
-					<el-form-item label="休假原因" prop="reasons">
-						<el-input type="textarea" v-model="applyForm.reasons"></el-input>
-					</el-form-item>
-				</el-form>
+				<el-form :model="applyForm" :rules="rules" ref="applyRuleForm" label-width="120px">
+          <el-form-item label="感知资源类型" prop="dataClass">
+            <el-select v-model="applyForm.dataClass" placeholder="请选择类型">
+              <el-option label="静态数据" :value="1"></el-option>
+              <el-option label="动态数据" :value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="感知数据资源项" prop="dataItem">
+            <el-input v-model="applyForm.dataItem"></el-input>
+          </el-form-item>
+          <el-form-item label="感知资源分类" prop="dataCategory">
+            <el-select v-model="applyForm.dataCategory" placeholder="请选择类型">
+              <el-option label="人脸" :value="1"></el-option>
+              <el-option label="卡口" :value="2"></el-option>
+              <el-option label="结构化" :value="3"></el-option>
+              <el-option label="社区" :value="4"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="感知资源分级" prop="dataLevel">
+            <el-select v-model="applyForm.dataLevel" placeholder="请选择类型">
+              <el-option label="一级" :value="1"></el-option>
+              <el-option label="二级" :value="2"></el-option>
+              <el-option label="三级" :value="3"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="申请单位" prop="dept">
+            <el-input  v-model="applyForm.dept"></el-input>
+          </el-form-item>
+          <el-form-item label="申请人" prop="person">
+            <el-input  v-model="applyForm.person"></el-input>
+          </el-form-item>
+          <el-form-item label="申请人联系方式" prop="personPhone">
+            <el-input  v-model="applyForm.personPhone"></el-input>
+          </el-form-item>
+          <el-form-item label="申请时间" prop="applyTime">
+            <el-date-picker v-model="applyForm.applyTime"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="申请原因" prop="reasons">
+            <el-input type="textarea" v-model="applyForm.reasons"></el-input>
+          </el-form-item>
+        </el-form>
 				<template #footer>
 					<span class="dialog-footer">
 						<el-button @click="dialogCancelHandler">取 消</el-button>
@@ -120,16 +136,31 @@
           <el-step title="审核通过/审核拒绝"></el-step>
         </el-steps>
         <el-form label-width="168px" label-suffix=":">
-          <el-form-item label="休假类型">
-            {{ detailData.applyType }}
+          <el-form-item label="感知资源类型">
+            {{ detailData.dataClass }}
           </el-form-item>
-          <el-form-item label="休假时间">
-            {{ detailData.time }}
+          <el-form-item label="感知数据资源项">
+            {{ detailData.dataItem }}
           </el-form-item>
-          <el-form-item label="休假时长">
-            {{ detailData.leaveTime }}
+          <el-form-item label="感知资源分类">
+            {{ detailData.dataCategory }}
           </el-form-item>
-          <el-form-item label="休假原因">
+          <el-form-item label="感知资源分级">
+            {{ detailData.dataLevel }}
+          </el-form-item>
+          <el-form-item label="申请单位">
+            {{ detailData.dept }}
+          </el-form-item>
+          <el-form-item label="申请人">
+            {{ detailData.person }}
+          </el-form-item>
+          <el-form-item label="申请人联系方式">
+            {{ detailData.personPhone }}
+          </el-form-item>
+          <el-form-item label="申请时间">
+            {{ detailData.applyTime }}
+          </el-form-item>
+          <el-form-item label="申请原因">
             {{ detailData.reasons }}
           </el-form-item>
           <el-form-item label="审核状态">
@@ -161,39 +192,66 @@ export default {
         prop: "orderNo",
         label: "单号",
       },
+
       {
-        prop: "",
-        label: "休假时间",
-				formatter(row, col, value) {
-					return publicFn.formateDate(new Date(row.startTime), 'yyyy-MM-dd') + '到' + publicFn.formateDate(new Date(row.endTime), 'yyyy-MM-dd')
-				}
-      },
-      {
-        prop: "leaveTime",
-        label: "休假时间",
-      },
-      {
-        prop: "applyType",
-        label: "休假类型",
+        prop: "dataClass",
+        label: "感知资源类型",
         formatter(row, col, value) {
           return {
-            1: "事假",
-            2: "调休",
-            3: "年假"
+            1: "静态数据",
+            2: "动态数据"
           }[value];
         },
       },
       {
-        prop: "reasons",
-        label: "休假原因"
+        prop: "dataItem",
+        label: "感知数据资源项"
       },
       {
-        prop: "createTime",
-        label: "申请时间",
+        prop: "dataCategory",
+        label: "感知资源分类",
         formatter(row, col, value) {
-          return publicFn.formateDate(new Date(value));
+          return {
+            1: "人脸",
+            2: "卡口",
+            3: "结构化",
+            4: "社区"
+          }[value];
         },
       },
+      {
+        prop: "dataLevel",
+        label: "感知资源分级",
+        formatter(row, col, value) {
+          return {
+            1: "一级",
+            2: "二级",
+            3: "三级",
+            4: "四级"
+          }[value];
+        },
+      },
+      {
+        prop: "dept",
+        label: "申请单位"
+      },
+      {
+        prop: "person",
+        label: "申请人"
+      },
+      {
+        prop: "personPhone",
+        label: "申请人联系方式"
+      },
+      {
+        prop: "applyTime",
+        label: "申请时间"
+      },
+      {
+        prop: "reasons",
+        label: "申请原因"
+      },
+
       {
         prop: "auditUsers",
         label: "审批人"
@@ -229,19 +287,11 @@ export default {
 			applyType: 1,
 			date: '',
 			leaveTime: '',
-			reasons: ''
+      dept: '',
+      reasons: ''
 		});
     //表单验证规则
     const rules = reactive({
-      applyType: [
-        {
-          required: true,
-          message: "请选择请假类型",
-          trigger: "blur",
-        },
-      ],
-      date: [{ required: true, message: "请选择请假时间", trigger: "blur" }],
-      reasons: [{ required: true, message: "请输入请假原因", trigger: "blur" }],
     });
     //操作类型
     const action = ref("create");
@@ -293,7 +343,7 @@ export default {
             params.action = action.value;
             await proxy.$api.postLeave_C(params);
             if(params.action === 'create'){
-                proxy.$message.success('申请休假成功');
+                proxy.$message.success('申请成功');
             }
             isShow.value = false;
             getLeaveListRequest();
@@ -313,13 +363,28 @@ export default {
 		};
     // 表格每行查看按钮事件
     const handleSee = (row) => {
-      detailData.applyType = {
-        1: "事假",
-        2: "调休",
-        3: "年假"
-      }[row.applyType]
-      detailData.time = publicFn.formateDate(new Date(row.startTime), 'yyyy-MM-dd') + '到' + publicFn.formateDate(new Date(row.endTime), 'yyyy-MM-dd')
-      detailData.leaveTime = row.leaveTime
+      detailData.dataClass = {
+        1: "静态数据",
+        2: "动态数据"
+      }[row.dataClass]
+      detailData.dataItem = row.dataItem
+      detailData.dataCategory = {
+        1: "人脸",
+        2: "卡口",
+        3: "结构化",
+        4: "社区"
+      }[row.dataCategory]
+      detailData.dataLevel =  {
+        1: "一级",
+        2: "二级",
+        3: "三级",
+        4: "四级"
+      }[row.dataLevel]
+
+      detailData.dept = row.dept
+      detailData.person = row.person
+      detailData.personPhone = row.personPhone
+      detailData.applyTime = row.applyTime
       detailData.reasons = row.reasons
       detailData.applyStateName = {
         1: "待审批",
@@ -330,6 +395,8 @@ export default {
       }[row.applyState]
       detailData.applyState = row.applyState
       detailData.curAuditUserName = row.curAuditUserName
+      detailData.applyUser = row.applyUser.userName
+      detailData._id = row._id
       detailShow.value = true
     };
     // 表格每行的作废按钮事件
